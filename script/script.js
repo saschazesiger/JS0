@@ -1,14 +1,10 @@
 import * as THREE from './lib/three.module.js'
-//import {GLTFLoader} from './lib/GLTFLoader.js'
+import {GLTFLoader} from './lib/GLTFLoader.js'
 import {OrbitControls} from './lib/OrbitControls.js'
 
 
 class app {
   constructor() {
-    this.initalize();
-  }
-
-  initalize() {
     this.renderer = new THREE.WebGLRenderer({antialias: true});
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -24,18 +20,20 @@ class app {
 
     this.scene = new THREE.Scene();
 
+    this.models()
+
+    this.light = new THREE.PointLight( 0x404040 );
+    this.light.position.set(10, 10, 10)
+    this.light.power = 50
+    this.ambientlight = new THREE.AmbientLight(0x404040)
+    this.ambientlight.intensity = 2
+    this.scene.add(this.light);
+    this.scene.add(this.ambientlight);
+
     const controls = new OrbitControls(
       this.camera, this.renderer.domElement);
     controls.target.set(0, 20, 0);
     controls.update();
-
-    this.planegeometry = new THREE.PlaneGeometry(100, 100)
-    this.planematerial = new THREE.MeshBasicMaterial({color: 0x00ff00})
-    this.plane = new THREE.Mesh(this.planegeometry, this.planematerial)
-    this.plane.rotateX(Math.PI + (Math.PI / 2))
-
-    this.scene.add(this.plane)
-
     this.raf();
   }
 
@@ -50,6 +48,28 @@ class app {
       this.renderer.render(this.scene, this.camera);
       this.raf();
     });
+  }
+
+  models(){
+    const loader = new GLTFLoader();
+    loader.load(
+      '../objects/baum.glb',
+      gltf => {
+        this.gltfscene = gltf.scene
+        this.scene.add(gltf.scene)
+        this.renderer.setAnimationLoop( this.render.bind(this));
+      },
+      xhr => {
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+      },
+      err => {
+        console.log('error')
+      } 
+    )
+  }
+  render( ){
+    this.gltfscene.rotateY(0.01);
+    this.renderer.render( this.scene, this.camera );
   }
 }
 
