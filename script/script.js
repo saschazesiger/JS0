@@ -53,11 +53,11 @@ class app {
   }
 }
 
-
-let _APP = null;
+let build = null;
 
 window.addEventListener('DOMContentLoaded', () => {
-  _APP = new app();
+  build = new app();
 
 });
+
 
