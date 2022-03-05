@@ -1,23 +1,2 @@
-User-Agent: Googlebot
-Allow: /test2
-Disallow: /
-
-
-User-Agent: MSNBot
-Allow: /test2
-Disallow: /test
-
-
-User-Agent: Slurp
-Allow: /test2
-Disallow: /test
-
-
-User-Agent: Lycos
-Allow: /test2
-Disallow: /test
-
-
-User-Agent: Seekbot
-Allow: /test2
-Disallow: /test
+User-Agent: *
+Allow: /
